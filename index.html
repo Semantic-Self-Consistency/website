@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Enhancing Language Model Reasoning via Weighted Reasoning in Self-Consistency">
+  <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enhancing Language Model Reasoning via Weighted Reasoning in Self-Consistency</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.ico">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Enhancing Language Model Reasoning via Weighted Reasoning in Self-Consistency</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://keunhong.com">Tim Knappe</a>,</span>
+            <span class="author-block">
+              <a href="https://utkarshsinha.com">Ryan Li</a>,</span>
+            <span class="author-block">
+              <a href="https://jonbarron.info">Kaylee Chhua</a>,
+            </span>
+            <span class="author-block">
+              <a href="http://sofienbouaziz.com">Ayush Chauhan</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://www.danbgoldman.com">Sean O'Brien</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://homes.cs.washington.edu/~seitz/">Kevin Zhu</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Algoverse AI Research</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2410.07839"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2410.07839"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <!-- <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="./static/videos/teaser.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
+        free-viewpoint
+        portraits.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            While large language models (LLMs) have rapidly improved their performance on a broad number of tasks, they still often fall short on reasoning tasks.
+             As LLMs become more integrated in diverse real-world tasks, advancing their reasoning capabilities is crucial to their effectiveness in nuanced, complex problems.
+          </p>
+          <p>
+            <a href="https://arxiv.org/pdf/2203.11171" target="_blank">(Wang et al)</a>'s framework reveals that sampling multiple rationales before taking a majority vote reliably improves model performance across various closed-answer reasoning tasks. 
+            Standard methods based on this framework aggregate the final decisions of these rationales but fail to utilize the detailed step-by-step reasoning paths applied by these paths.
+          </p>
+          <p>
+            Our work enhances this approach by incorporating and analyzing both the reasoning paths of these rationales in addition to their final decisions before taking a majority vote. 
+            These methods not only improve the reliability of reasoning paths but also cause more robust performance on complex reasoning tasks.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Simplified Approach</h2>
+        <div class="publication-video">
+          <img src="./static/images/clustering-simplification.png">
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Methodology</h2>
+      </div>
+    </div>
+    <div class="columns is-centered">
+
+      <!-- Visual Effects. -->
+      <div class="column">
+        <div class="content">
+          <h3 class="title is-4">Centroid Proximity Weighting</h3>
+          <p>
+            Here we map responses as embedding vectors, calculate their centroid, and measure distances from it. 
+            Closer vectors get higher weights, and the total weight for each output determines the most likely correct answer.
+          </p>
+          <!-- <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/dollyzoom-stacked.mp4"
+                    type="video/mp4">
+          </video> -->
+          <table>
+            <tr>
+                <th>Dataset</th>
+                <th>Method/Metric</th>
+                <th>Llama 2 7B</th>
+                <th>Mistral 7B</th>
+                <th>GPT 3.5</th>
+                <th>Llama 3 8B</th>
+                <th>GPT-4o mini</th>
+            </tr>
+            <tr>
+                <td rowspan="2">AQuA-RAT</td>
+                <td>SC baseline</td>
+                <td>24.80</td>
+                <td>25.60</td>
+                <td>59.40</td>
+                <td>45.28</td>
+                <td>83.07</td>
+            </tr>
+            <tr>
+                <td>CPW</td>
+                <td>24.60 (-0.2)</td>
+                <td>29.00 (+3.4)</td>
+                <td>68.00 (+8.6)</td>
+                <td>46.06 (+0.78)</td>
+                <td>82.68 (-0.39)</td>
+            </tr>
+            <tr>
+                <td rowspan="2">SVAMP</td>
+                <td>SC baseline</td>
+                <td>46.50</td>
+                <td>68.50</td>
+                <td>79.80</td>
+                <td>73.33</td>
+                <td>89.80</td>
+            </tr>
+            <tr>
+                <td>CPW</td>
+                <td>47.40 (+0.9)</td>
+                <td>69.80 (+1.3)</td>
+                <td>81.00 (+1.2)</td>
+                <td>74.67 (+1.34)</td>
+                <td>89.60 (-0.2)</td>
+            </tr>
+            <tr>
+                <td rowspan="2">StrategyQA</td>
+                <td>SC baseline</td>
+                <td>48.91</td>
+                <td>67.98</td>
+                <td>66.81</td>
+                <td>63.32</td>
+                <td>79.18</td>
+            </tr>
+            <tr>
+                <td>CPW</td>
+                <td>55.02 (+6.11)</td>
+                <td>60.70 (-7.28)</td>
+                <td>65.21 (-1.6)</td>
+                <td>63.32 (+0.0)</td>
+                <td>73.80 (-5.38)</td>
+            </tr>
+        </table>
+        </div>
+      </div>
+      <!--/ Visual Effects. -->
+
+      <!-- Matting. -->
+      <div class="column">
+        <h3 class="title is-4">Semantic Consensus Weighting</h3>
+        <div class="columns is-centered">
+          <div class="column content">
+            <p>
+              We compare embeddings by using cosine similarity to weigh responses. 
+              For each embedding, we calculate its cosine similarity with every other embedding and sum the scores. These scores are then aggregated to identify the response with the highest overall consensus.
+            </p>
+            <!-- <video id="matting-video" controls playsinline height="100%">
+              <source src="./static/videos/matting.mp4"
+                      type="video/mp4">
+            </video> -->
+            <table>
+              <tr>
+                  <th>Dataset</th>
+                  <th>Method/Metric</th>
+                  <th>Llama 2 7B</th>
+                  <th>Mistral 7B</th>
+                  <th>GPT 3.5</th>
+                  <th>Llama 3 8B</th>
+                  <th>GPT-4o mini</th>
+              </tr>
+              <tr>
+                  <td rowspan="2">AQuA-RAT</td>
+                  <td>SC baseline</td>
+                  <td>24.80</td>
+                  <td>25.60</td>
+                  <td>59.40</td>
+                  <td>45.28</td>
+                  <td>83.07</td>
+              </tr>
+              <tr>
+                  <td>SCW</td>
+                  <td>25.00 (+0.2)</td>
+                  <td>29.80 (+4.2)</td>
+                  <td>65.40 (+6.0)</td>
+                  <td>47.48 (+2.2)</td>
+                  <td>86.18 (+3.11)</td>
+              </tr>
+              <tr>
+                  <td rowspan="2">SVAMP</td>
+                  <td>SC baseline</td>
+                  <td>46.50</td>
+                  <td>68.50</td>
+                  <td>79.80</td>
+                  <td>73.33</td>
+                  <td>89.80</td>
+              </tr>
+              <tr>
+                  <td>SCW</td>
+                  <td>46.90 (+0.4)</td>
+                  <td>70.20 (+1.7)</td>
+                  <td>80.30 (+0.5)</td>
+                  <td>73.00 (-0.33)</td>
+                  <td>92.38 (+2.98)</td>
+              </tr>
+              <tr>
+                  <td rowspan="2">StrategyQA</td>
+                  <td>SC baseline</td>
+                  <td>48.91</td>
+                  <td>67.98</td>
+                  <td>66.81</td>
+                  <td>63.32</td>
+                  <td>79.18</td>
+              </tr>
+              <tr>
+                  <td>SCW</td>
+                  <td>62.44 (+13.53)</td>
+                  <td>65.35 (-2.63)</td>
+                  <td>74.70 (+7.89)</td>
+                  <td>71.47 (+8.15)</td>
+                  <td>79.68 (+0.5)</td>
+              </tr>
+          </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--/ Matting. -->
+
+    <!-- Animation. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <!-- Interpolating. -->
+        <h3 class="title is-4">Outlier removal</h3>
+        <div class="content has-text-justified">
+          <p>
+            Anomaly detection serves a diagnostic tool to reduce the sample space particularly in noisy scenarios.
+            Additionally methods generally improved performance over the SC baseline.
+          </p>
+<table>
+    <thead>
+        <tr>
+            <th>Dataset</th>
+            <th>Method</th>
+            <th>Llama 2</th>
+            <th>Mistral</th>
+            <th>GPT 3.5</th>
+            <th>Llama 3</th>
+            <th>GPT4o mini</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan="4">AQuA-RAT</td>
+            <td>SC baseline</td>
+            <td>24.8</td>
+            <td>25.6</td>
+            <td>59.4</td>
+            <td>45.28</td>
+            <td>83.07</td>
+        </tr>
+        <tr>
+            <td>Isolation Forest</td>
+            <td><b>28.45</b></td>
+            <td><b>26.61</b></td>
+            <td><b>65.27</b></td>
+            <td><b>72.25</b></td>
+            <td>70.86</td>
+        </tr>
+        <tr>
+            <td>K-nearest neighbors</td>
+            <td>25.40</td>
+            <td>25.91</td>
+            <td><b>62.81</b></td>
+            <td><b>68.10</b></td>
+            <td>71.65</td>
+        </tr>
+        <tr>
+            <td>One-class SVM</td>
+            <td><b>26.70</b></td>
+            <td><b>28.45</b></td>
+            <td>59.55</td>
+            <td><b>68.39</b></td>
+            <td>70.87</td>
+        </tr>
+        <tr>
+            <td rowspan="4">SVAMP</td>
+            <td>SC baseline</td>
+            <td>46.5</td>
+            <td>68.5</td>
+            <td>79.8</td>
+            <td>73.33</td>
+            <td>89.80</td>
+        </tr>
+        <tr>
+            <td>Isolation Forest</td>
+            <td>45.94</td>
+            <td>68.84</td>
+            <td><b>84.65</b></td>
+            <td><b>84.44</b></td>
+            <td>84.44</td>
+        </tr>
+        <tr>
+            <td>K-nearest neighbors</td>
+            <td>45.85</td>
+            <td>68.84</td>
+            <td><b>84.64</b></td>
+            <td><b>82.57</b></td>
+            <td>82.57</td>
+        </tr>
+        <tr>
+            <td>One-class SVM</td>
+            <td>44.94</td>
+            <td>67.23</td>
+            <td><b>85.23</b></td>
+            <td><b>82.11</b></td>
+            <td>82.11</td>
+        </tr>
+        <tr>
+            <td rowspan="4">StrategyQA</td>
+            <td>SC baseline</td>
+            <td>48.91</td>
+            <td>67.98</td>
+            <td>66.81</td>
+            <td>63.32</td>
+            <td>79.18</td>
+        </tr>
+        <tr>
+            <td>Isolation Forest</td>
+            <td>49.34</td>
+            <td>68.70</td>
+            <td><b>70.07</b></td>
+            <td><b>70.80</b></td>
+            <td>79.91</td>
+        </tr>
+        <tr>
+            <td>K-nearest neighbors</td>
+            <td>49.49</td>
+            <td><b>69.00</b></td>
+            <td><b>68.65</b></td>
+            <td><b>69.43</b></td>
+            <td>80.64</td>
+        </tr>
+        <tr>
+            <td>One-class SVM</td>
+            <td><b>49.85</b></td>
+            <td><b>69.43</b></td>
+            <td><b>68.73</b></td>
+            <td><b>70.45</b></td>
+            <td><b>81.02</b></td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+        </div>
+        <br/>
+        <!--/ Interpolating. -->
+
+    <!-- Concurrent Work. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            There's a lot of excellent work that was introduced around the same time as ours.
+          </p>
+          <p>
+            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
+          </p>
+          <p>
+            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
+            both use deformation fields to model non-rigid scenes.
+          </p>
+          <p>
+            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
+          </p>
+          <p>
+            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Concurrent Work. -->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{knappe2024enhancinglanguagemodelreasoning,
+      title={Enhancing Language Model Reasoning via Weighted Reasoning in Self-Consistency}, 
+      author={Tim Knappe and Ryan Li and Ayush Chauhan and Kaylee Chhua and Kevin Zhu and Sean O'Brien},
+      year={2024},
+      eprint={2410.07839},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2410.07839}, 
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+            Website template borrowed from <a  href="https://github.com/nerfies/nerfies.github.io">nerfies</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
