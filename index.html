@@ -529,18 +529,37 @@
             There's a lot of excellent work that was introduced around the same time as ours.
           </p>
           <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
+            <a href="https://arxiv.org/pdf/2210.11610">Large Language Models Can Self-Improve</a>  proposes a self-consistency fine-tuning method on self-generated rationale-augmented outputs, enhancing reasoning capabilities in unsupervised contexts.
           </p>
           <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
+            <a href="https://arxiv.org/pdf/2307.03027">Improving Retrieval-Augmented Large Language Models via Data Importance Learning</a>
+            introduces a reweighting algorithm using multilinear extensions to evaluate retrieved data relevance, thus improving performance without additional model training.
           </p>
           <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
+            <a href="https://arxiv.org/pdf/2311.00913">Self-Influence Guided Data Reweighting for Language Model Pre-training</a>
+            presents a method that assigns weights based on self-influence scores during pretraining, focusing on higher-quality samples to optimize model training.
           </p>
           <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
+            <a href="https://arxiv.org/pdf/2408.09849">Importance Weighting Can Help Large Language Models Self-Improve</a>
+            proposes a novel DS weight metric to filter self-generated samples with high distribution shift, enhancing self-improvement in reasoning tasks without extensive external supervision.
           </p>
+          <p>
+            <a href="https://arxiv.org/abs/2201.11903">Chain-of-Thought Prompting Elicits Reasoning in Large Language Models</a>
+            explores how prompting LLMs with a chain-of-thought approach can significantly improve their reasoning abilities across various tasks.
+          </p>
+          <p>
+            <a href="https://arxiv.org/abs/2203.11171">Self-Consistency Improves Chain of Thought Reasoning in Language Models</a>
+            investigates the use of self-consistency in chain-of-thought reasoning, where diverse answer samples are generated to enhance accuracy, resonating with our paper's approach of using multiple reasoning paths.
+          </p>
+          <p>
+            <a href="https://arxiv.org/abs/2205.09712">Selection-Inference: Exploiting Large Language Models for Interpretable Logical Reasoning</a>
+            presents a selection-inference framework that leverages reasoning chains in language models for improved interpretability, aligning with semantic self-consistency focus.
+          </p>
+          <p>
+            <a href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a>
+            highlights foundational work on BERT's embedding capabilities, particularly relevant to our use of featurizer models like BERT-based embeddings.
+          </p>
+
         </div>
       </div>
     </div>
